@@ -1,26 +1,17 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer } from "@react-navigation/native";
 import Home from "./src/components/screens/Home";
-import { createStackNavigator } from "@react-navigation/stack";
 
-const NavStack = createStackNavigator(
-  {
-    Home: {
-      screen: Home,
-      navigationOptions: {
-        title: "Home",
-      },
-    },
-  },
-  {
-    initialRouteName: "Home",
-  }
-);
-const App = () => {
+const NavStack = createNativeStackNavigator();
+export const App = () => {
   return (
     <NavigationContainer>
-      <NavStack.Navigator>
-        <NavStack.Screen name="Home" component={Home} />
+      <NavStack.Navigator initialRouteName="Home">
+        <NavStack.Screen
+          name="Home"
+          component={Home}
+          options={{ title: "home" }}
+        />
       </NavStack.Navigator>
     </NavigationContainer>
   );

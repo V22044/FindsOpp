@@ -1,7 +1,10 @@
-const Home = () => {
+import { Text, View } from "react-native";
+import { StatusBar } from "expo-status-bar";
+export const Home = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <Text>Welcome to the Home Screen!</Text>
+      <StatusBar style="auto" />
     </View>
   );
 };
