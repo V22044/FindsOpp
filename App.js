@@ -1,18 +1,60 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+//import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Image } from "react-native";
+import icon from "./src/components/UI/icon.js";
 import Home from "./src/components/screens/Home.js";
+import Profile from "./src/components/screens/Profile.js";
+import Search from "./src/components/screens/Search.js";
+import Saved from "./src/components/screens/Saved.js";
 
-const Stack = createNativeStackNavigator();
+const BottomTab = createBottomTabNavigator();
+
 export const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
+      <BottomTab.Navigator>
+        <BottomTab.Screen
           name="Home"
           component={Home}
-          options={{ title: "Home" }}
+          options={{
+            title: "Home",
+            tabBarIcon: ({}) => (
+              <Image source={icon.Home} style={{ width: 20, height: 20 }} />
+            ),
+          }}
         />
-      </Stack.Navigator>
+        <BottomTab.Screen
+          name="Search"
+          component={Search}
+          options={{
+            title: "Search",
+            tabBarIcon: ({}) => (
+              <Image source={icon.Search} style={{ width: 20, height: 20 }} />
+            ),
+          }}
+        />
+        <BottomTab.Screen
+          name="Saved"
+          component={Saved}
+          options={{
+            title: "Saved",
+            tabBarIcon: ({}) => (
+              <Image source={icon.Saved} style={{ width: 20, height: 20 }} />
+            ),
+          }}
+        />
+        <BottomTab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            title: "Profile",
+            tabBarIcon: ({}) => (
+              <Image source={icon.Profile} style={{ width: 20, height: 20 }} />
+            ),
+          }}
+        />
+      </BottomTab.Navigator>
     </NavigationContainer>
   );
 };
