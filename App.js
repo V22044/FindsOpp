@@ -5,7 +5,7 @@ import { Image } from "react-native";
 import icon from "./src/components/UI/icon.js";
 import Home from "./src/components/screens/Home.js";
 import Profile from "./src/components/screens/Profile.js";
-import Search from "./src/components/screens/Search.js";
+import SearchTab from "./src/components/screens/SearchTab.js";
 import Saved from "./src/components/screens/Saved.js";
 
 const BottomTab = createBottomTabNavigator();
@@ -25,8 +25,8 @@ export const App = () => {
           }}
         />
         <BottomTab.Screen
-          name="Search"
-          component={Search}
+          name="SearchTab"
+          component={SearchTab}
           options={{
             title: "Search",
             tabBarIcon: ({}) => (
