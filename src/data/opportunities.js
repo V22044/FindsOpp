@@ -33,6 +33,9 @@ const opportunities = [
       telephone: "0161 496 3021",
       email: "help@northsidefoodsupport.org.uk",
     },
+    signup_link: "https://northsidefoodsupport.org.uk/volunteer/packing-sprint",
+    imageURL:
+      "https://media.istockphoto.com/id/1362787762/photo/details-of-volunteer-with-box-of-food-for-poor.jpg?s=612x612&w=0&k=20&c=q-eLXPRlCfDV2m8mRJt1GIoExrSQJFW1h8FiE6LoMc0=",
   },
   {
     id: 3,
@@ -50,6 +53,8 @@ const opportunities = [
       email: "volunteers@warmplatesuk.org.uk",
     },
     signup_link: "https://warmplatesuk.org.uk/volunteer/shifts",
+    imageURL:
+      "https://media.istockphoto.com/id/1425562530/photo/diverse-group-of-volunteers-working-at-the-warehouse.jpg?s=612x612&w=0&k=20&c=jVsS5kGdCDYnDv0RRtPSq-dYQadXJQNEfgL406-wOiI=",
   },
   {
     id: 4,
@@ -66,6 +71,9 @@ const opportunities = [
       telephone: "01904 662 480",
       email: "yorkshop@brightstartretail.org.uk",
     },
+    signup_link: "https://brightstartretail.org.uk/volunteer/york-shop",
+    imageURL:
+      "https://media.istockphoto.com/id/1400087142/photo/young-woman-donating-items-to-volunteer-ar-charity-or-thrift-shop.jpg?s=612x612&w=0&k=20&c=7v9RzkFallwp85KtEZ7q5sGxjOSkGepfJt-7utKr_YE=",
   },
   {
     id: 5,
@@ -83,6 +91,8 @@ const opportunities = [
       email: "team@coastcareuk.org.uk",
     },
     signup_link: "https://coastcareuk.org.uk/events/beach-clean",
+    imageURL:
+      "https://media.istockphoto.com/id/1435005446/photo/recyclers-cleaning-the-beach.jpg?s=612x612&w=0&k=20&c=92lBY2A3i0c32_1wd_tTulVcaW0crv8jItFucmS75qo=",
   },
   {
     id: 6,
@@ -99,6 +109,9 @@ const opportunities = [
       telephone: "0113 496 9020",
       email: "volunteer@pawswhiskersrescue.org.uk",
     },
+    signup_link: "https://pawswhiskersrescue.org.uk/volunteer/enrichment-day",
+    imageURL:
+      "https://media.istockphoto.com/id/1250060339/photo/dog-shelter.jpg?s=612x612&w=0&k=20&c=-YBjeCarIKcvzONuxHdYAr1N64DjiiDOa56QOArlvY4=",
   },
 ];
 
