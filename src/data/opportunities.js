@@ -1,5 +1,6 @@
 const opportunities = [
   {
+    id: 1,
     title: "Park Litter Pick & Nature Walk Clean-up",
     organisation: "GreenSteps Community",
     cause: "Environment",
@@ -14,8 +15,11 @@ const opportunities = [
       email: "volunteer@greenstepscommunity.org.uk",
     },
     signup_link: "https://greenstepscommunity.org.uk/volunteer/park-cleanup",
+    imageURL:
+      "https://media.istockphoto.com/id/2197310627/photo/volunteer-picking-up-plastic-bottle-in-park-cleanup.jpg?s=612x612&w=0&k=20&c=jyYE_O4BcWiWM_jRzcWbN7y6BeNCu-BDCwT_BJdWAQI=",
   },
   {
+    id: 2,
     title: "Food Bank Packing Sprint",
     organisation: "Northside Food Support",
     cause: "Community",
@@ -31,6 +35,7 @@ const opportunities = [
     },
   },
   {
+    id: 3,
     title: "Community Kitchen Serving Shift",
     organisation: "Warm Plates UK",
     cause: "Community",
@@ -47,6 +52,7 @@ const opportunities = [
     signup_link: "https://warmplatesuk.org.uk/volunteer/shifts",
   },
   {
+    id: 4,
     title: "Charity Shop Weekend Shift",
     organisation: "BrightStart Charity Retail",
     cause: "Community",
@@ -62,6 +68,7 @@ const opportunities = [
     },
   },
   {
+    id: 5,
     title: "Beach Clean & Microplastics Survey",
     organisation: "CoastCare UK",
     cause: "Environment",
@@ -78,6 +85,7 @@ const opportunities = [
     signup_link: "https://coastcareuk.org.uk/events/beach-clean",
   },
   {
+    id: 6,
     title: "Animal Shelter Enrichment Day",
     organisation: "Paws & Whiskers Rescue",
     cause: "Animal Welfare",

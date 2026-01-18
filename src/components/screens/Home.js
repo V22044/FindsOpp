@@ -2,15 +2,18 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
+import { useState } from "react";
 
 export const Home = ({ navigation }) => {
   //State ----------------------------
+  const [opportunities, setOpportunities] = useState("");
   //Handler --------------------------
   const goToSearch = () => navigation.navigate("SearchTab");
 
   //View -----------------------------
   return (
     <View style={styles.container}>
+      {/* Header */}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Welcome.</Text>
         <ButtonTray>
@@ -23,6 +26,8 @@ export const Home = ({ navigation }) => {
           />
         </ButtonTray>
       </View>
+      {/* Main */}
+
       <StatusBar style="auto" />
     </View>
   );
