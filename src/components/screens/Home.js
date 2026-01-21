@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import initialOpportunities from "../../data/opportunities.js";
+import OppList from "../entity/OppList.js";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
 import { useState } from "react";
@@ -28,6 +29,7 @@ export const Home = ({ navigation }) => {
         </ButtonTray>
       </View>
       {/* Main */}
+      <OppList opportunities={opportunities} onSelect={() => {}} />
       <StatusBar style="auto" />
     </View>
   );
