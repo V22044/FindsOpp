@@ -1,16 +1,27 @@
-import { Pressable, StyleSheet, Text, View, Image } from "react-native";
+import { Pressable, StyleSheet, Text, View, Image, Button } from "react-native";
 import { Calendar, MapPin, Clock, Bookmark } from "lucide-react-native";
+import { useState } from "react";
 export const JobCard = ({ opportunity, onSelect }) => {
   // Initialisations ---------------------
   // State -------------------------------
+  const [BookmarkToggle, setBookmarkToggle] = useState(false);
   // Handlers ----------------------------
+  const toggleBookmark = () => {
+    if (BookmarkToggle) return;
+    console.log("Bookmarked:", opportunity.title);
+    setBookmarkToggle(true);
+  };
   // View --------------------------------
   return (
     <Pressable onPress={() => onSelect(opportunity)} style={styles.card}>
       {/* image */}
       <Image source={{ uri: opportunity.image_link }} style={styles.image} />
 
-      <View style={styles.bookmarkContainer}>
+      <View
+        style={styles.bookmarkContainer}
+        onPress={toggleBookmark}
+        disabled={BookmarkToggle}
+      >
         <View style={styles.bookmarkIcon}>
           <Bookmark size={20} color="#000" />
         </View>
