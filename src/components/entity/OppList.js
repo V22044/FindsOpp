@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet } from "react-native";
-import OppItem from "./OppItem.js";
+import JobCard from "../UI/jobCard.js";
 
 const OppList = ({ opportunities, onSelect }) => {
   // Initialisations ---------------------
@@ -10,7 +10,7 @@ const OppList = ({ opportunities, onSelect }) => {
     <ScrollView style={styles.container}>
       {opportunities.map((opportunity) => {
         return (
-          <OppItem
+          <JobCard
             key={opportunity.id}
             opportunity={opportunity}
             onSelect={onSelect}
