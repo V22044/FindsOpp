@@ -28,18 +28,27 @@ export const Home = ({ navigation }) => {
         </ButtonTray>
       </View>
       {/* Main */}
-      <OpportunitiesList opportunities={opportunities} onSelect={goToSearch} />
       <StatusBar style="auto" />
     </View>
   );
 };
-
+//Styles ---------------------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
+  },
+  titleContainer: {
+    width: "100%",
+    backgroundColor: "#cfcfcf",
+    padding: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginTop: 20,
+    alignSelf: "flex-start",
   },
 });
 
