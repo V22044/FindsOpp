@@ -1,10 +1,34 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
+import initialOpportunities from "../../data/opportunities.js";
+import { Search } from "lucide-react-native";
+import { Button, ButtonTray } from "../UI/Button.js";
+import { useState } from "react";
 
-export const Home = () => {
+export const Home = ({ navigation }) => {
+  //State ----------------------------
+  const [opportunities, setOpportunities] = useState(initialOpportunities);
+  //Handler --------------------------
+  const goToSearch = () => navigation.navigate("SearchTab");
+
+  //View -----------------------------
   return (
     <View style={styles.container}>
-      <Text>This is the Home screen.</Text>
+      {/* Header */}
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>Welcome.</Text>
+        <ButtonTray>
+          <Button
+            label="Type Something..."
+            icon={<Search size={20} color="grey" />}
+            styleButton={{ justifyContent: "flex-start", paddingLeft: 10 }}
+            styleLabel={{ color: "grey", fontSize: 16 }}
+            onClick={goToSearch}
+          />
+        </ButtonTray>
+      </View>
+      {/* Main */}
+      <OpportunitiesList opportunities={opportunities} onSelect={goToSearch} />
       <StatusBar style="auto" />
     </View>
   );
