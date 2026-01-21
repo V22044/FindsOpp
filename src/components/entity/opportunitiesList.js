@@ -1,18 +1,17 @@
 import { ScrollView } from "react-native";
-import UserItem from "./UserItem";
 
-const opportunitiesList = ({ opportunities, onSelect }) => {
+const OpportunitiesList = ({ opportunities, onSelect }) => {
   // Initialisations ---------------------
   // State -------------------------------
   // Handlers ----------------------------
   // View --------------------------------
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView>
       {opportunities.map((opportunity) => {
         return (
-          <UserItem
-            key={opportunity.UserID}
-            user={opportunity}
+          <opportunitiesItem
+            key={opportunity.id}
+            opportunity={opportunity}
             onSelect={onSelect}
           />
         );
@@ -21,4 +20,4 @@ const opportunitiesList = ({ opportunities, onSelect }) => {
   );
 };
 
-export default opportunitiesList;
+export default OpportunitiesList;
