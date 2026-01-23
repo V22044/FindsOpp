@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// Replace with your actual API Gateway URL
+// Put API link here:
 const API_BASE_URL = "??";
 
 const api = axios.create({
