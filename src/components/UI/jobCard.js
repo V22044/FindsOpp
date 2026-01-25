@@ -7,9 +7,9 @@ export const JobCard = ({ opportunity, onSelect }) => {
   const [BookmarkToggle, setBookmarkToggle] = useState(false);
   // Handlers ----------------------------
   const toggleBookmark = () => {
-    if (BookmarkToggle) return;
-    console.log("Bookmarked:", opportunity.title);
-    setBookmarkToggle(true);
+    const testState = !BookmarkToggle;
+    console.log("Bookmarked:", opportunity.title, "Status:", testState);
+    setBookmarkToggle(testState);
   };
   // View --------------------------------
   return (
@@ -17,15 +17,11 @@ export const JobCard = ({ opportunity, onSelect }) => {
       {/* image */}
       <Image source={{ uri: opportunity.image_link }} style={styles.image} />
 
-      <View
-        style={styles.bookmarkContainer}
-        onPress={toggleBookmark}
-        disabled={BookmarkToggle}
-      >
+      <Pressable style={styles.bookmarkContainer} onPress={toggleBookmark}>
         <View style={styles.bookmarkIcon}>
-          <Bookmark size={20} color="#000" />
+          <Bookmark size={20} color={BookmarkToggle ? "#ff0000" : "#000"} />
         </View>
-      </View>
+      </Pressable>
 
       {/* content */}
       <View style={styles.content}>
