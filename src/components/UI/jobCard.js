@@ -20,7 +20,6 @@ export const JobCard = ({ opportunity, onSelect }) => {
 
       <Pressable style={styles.bookmarkContainer} onPress={toggleBookmark}>
         <View style={styles.bookmarkIcon}>
-          {/*<Bookmark size={20} color={BookmarkToggle ? "#ff0000" : "#000"} />*/}
           <FontAwesome
             name="bookmark"
             size={20}
