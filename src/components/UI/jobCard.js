@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View, Image, Button } from "react-native";
 import { Calendar, MapPin, Clock, Bookmark } from "lucide-react-native";
 import { useState } from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 export const JobCard = ({ opportunity, onSelect }) => {
   // Initialisations ---------------------
   // State -------------------------------
@@ -19,7 +20,12 @@ export const JobCard = ({ opportunity, onSelect }) => {
 
       <Pressable style={styles.bookmarkContainer} onPress={toggleBookmark}>
         <View style={styles.bookmarkIcon}>
-          <Bookmark size={20} color={BookmarkToggle ? "#ff0000" : "#000"} />
+          {/*<Bookmark size={20} color={BookmarkToggle ? "#ff0000" : "#000"} />*/}
+          <FontAwesome
+            name="bookmark"
+            size={20}
+            color={BookmarkToggle ? "#42bfd8" : "#000"}
+          />
         </View>
       </Pressable>
 
