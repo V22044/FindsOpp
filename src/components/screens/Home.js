@@ -5,12 +5,19 @@ import OppList from "../entity/OppList.js";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
 import { useState } from "react";
+import { DetailInfo } from "../UI/DetailInfo.js";
 
 export const Home = ({ navigation }) => {
   //State ----------------------------
   const [opportunities, setOpportunities] = useState(initialOpportunities);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedOpp, setSelectedOpp] = useState(null);
   //Handler --------------------------
   const goToSearch = () => navigation.navigate("SearchTab");
+  const goToDetails = (opp) => {
+    setSelectedOpp(opp);
+    setModalVisible(true);
+  };
 
   //View -----------------------------
   return (
@@ -29,7 +36,27 @@ export const Home = ({ navigation }) => {
         </ButtonTray>
       </View>
       {/* Main */}
-      <OppList opportunities={opportunities} onSelect={() => {}} />
+      <OppList opportunities={opportunities} onSelect={goToDetails} />
+      {/* When click on the JOB card this will appear */}
+      <DetailInfo
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        title={selectedOpp?.title}
+        details={
+          selectedOpp
+            ? [
+                selectedOpp.description,
+                `Organisation: ${selectedOpp.organisation}`,
+                `Date: ${selectedOpp.date}`,
+                `Time: ${selectedOpp.time}`,
+                `Duration: ${selectedOpp.duration}`,
+                `Location: ${selectedOpp.location}`,
+                `Cause: ${selectedOpp.cause}`,
+                `Contact: ${selectedOpp.contact.telephone} | ${selectedOpp.contact.email}`,
+              ]
+            : []
+        }
+      />
       <StatusBar style="auto" />
     </View>
   );
