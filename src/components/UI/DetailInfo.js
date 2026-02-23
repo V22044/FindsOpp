@@ -1,3 +1,4 @@
+import { AlignLeft } from "lucide-react-native";
 import {
   View,
   Text,
@@ -5,17 +6,23 @@ import {
   ScrollView,
   Modal,
   Pressable,
+  Image,
 } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
-export const DetailInfo = ({ visible, onClose, title, details }) => {
+export const DetailInfo = ({ visible, onClose, title, image, details }) => {
   return (
     <SafeAreaProvider>
       <Modal animationType="fade" transparent={true} visible={visible}>
         <SafeAreaView style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{title}</Text>
+            <Text style={styles.modalTitle}>{"Details"}</Text>
             <ScrollView style={styles.scrollView}>
+              <Image
+                source={{ uri: image }}
+                style={{ width: 350, height: 200, marginBottom: 15 }}
+              />
+              <Text style={styles.modalTitle}>{title}</Text>
               {details.map((detail, index) => (
                 <Text key={index} style={styles.detailText}>
                   {detail}
@@ -34,11 +41,13 @@ export const DetailInfo = ({ visible, onClose, title, details }) => {
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
+    paddingTop: 30,
   },
   modalView: {
+    height: "90%",
     width: "90%",
     backgroundColor: "white",
     borderRadius: 20,
@@ -57,11 +66,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 15,
+    alignSelf: "flex-start",
   },
   scrollView: {
-    maxHeight: 300,
     width: "100%",
-    marginBottom: 15,
+    margin: 20,
   },
   detailText: {
     fontSize: 16,
