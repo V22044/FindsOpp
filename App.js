@@ -48,7 +48,7 @@ export const App = () => {
           name="Profile"
           component={Profile}
           options={{
-            title: "Profile",
+            title: "My Profile",
             tabBarIcon: ({}) => (
               <Image source={icon.Profile} style={{ width: 20, height: 20 }} />
             ),

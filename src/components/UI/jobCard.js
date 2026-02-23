@@ -1,15 +1,16 @@
 import { Pressable, StyleSheet, Text, View, Image, Button } from "react-native";
 import { Calendar, MapPin, Clock, Bookmark } from "lucide-react-native";
 import { useState } from "react";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 export const JobCard = ({ opportunity, onSelect }) => {
   // Initialisations ---------------------
   // State -------------------------------
   const [BookmarkToggle, setBookmarkToggle] = useState(false);
   // Handlers ----------------------------
   const toggleBookmark = () => {
-    if (BookmarkToggle) return;
-    console.log("Bookmarked:", opportunity.title);
-    setBookmarkToggle(true);
+    const testState = !BookmarkToggle;
+    console.log("Bookmarked:", opportunity.title, "Status:", testState);
+    setBookmarkToggle(testState);
   };
   // View --------------------------------
   return (
@@ -17,15 +18,15 @@ export const JobCard = ({ opportunity, onSelect }) => {
       {/* image */}
       <Image source={{ uri: opportunity.image_link }} style={styles.image} />
 
-      <View
-        style={styles.bookmarkContainer}
-        onPress={toggleBookmark}
-        disabled={BookmarkToggle}
-      >
+      <Pressable style={styles.bookmarkContainer} onPress={toggleBookmark}>
         <View style={styles.bookmarkIcon}>
-          <Bookmark size={20} color="#000" />
+          <FontAwesome
+            name="bookmark"
+            size={20}
+            color={BookmarkToggle ? "#42bfd8" : "#000"}
+          />
         </View>
-      </View>
+      </Pressable>
 
       {/* content */}
       <View style={styles.content}>
