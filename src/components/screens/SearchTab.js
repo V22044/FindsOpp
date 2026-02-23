@@ -1,20 +1,29 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, TextInput } from "react-native";
-import { Search } from "lucide-react-native";
+import {
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import { Key, Search } from "lucide-react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export const SearchTab = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Search size={20} color="gray" />
-        <TextInput
-          style={styles.TextInput}
-          placeholder="Search opportunities..."
-        />
-      </View>
+    <SafeAreaView style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.searchContainer}>
+          <Search size={20} color="gray" />
+          <TextInput
+            style={styles.TextInput}
+            placeholder="Search opportunities..."
+          />
+        </View>
+      </TouchableWithoutFeedback>
 
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 };
 

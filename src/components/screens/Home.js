@@ -42,6 +42,7 @@ export const Home = ({ navigation }) => {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         title={selectedOpp?.title}
+        image={selectedOpp?.image_link}
         details={
           selectedOpp
             ? [
