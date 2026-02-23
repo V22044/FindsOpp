@@ -1,3 +1,4 @@
+//This file is set up with the help of AI, and is the backend server for the application. It handles user registration, login, and profile retrieval, as well as serving job opportunities data. The server uses Express for routing, Mongoose for MongoDB interactions, and bcrypt for password hashing.
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -101,4 +102,83 @@ app.post("/api/users/register", async (req, res) => {
     console.error("Error registering user:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
+});
+
+//user login
+
+app.post("/api/users/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    const checkPassword = await bcrypt.compare(password, user.password);
+    if (!checkPassword) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    console.log("User logged in:", email);
+
+    res.json({
+      message: "Login successful",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (error) {
+    console.error("Login Failed:", error);
+    res
+      .status(500)
+      .json({ message: "Server error during login", error: error.message });
+  }
+});
+
+//get user info
+app.get("/api/users/profile", async (req, res) => {
+  try {
+    const { email } = req.query;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await User.findOne({ email }).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Profile fetch error:", error);
+    res
+      .status(500)
+      .json({ message: "Server error fetching profile", error: error.message });
+  }
+});
+
+// error handler
+app.use((req, res) => {
+  res.status(404).json({ message: "Endpoint not found" });
+});
+
+//Start server
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
 });
