@@ -1,8 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 //import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Image } from "react-native";
-import icon from "./src/components/UI/icon.js";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Home from "./src/components/screens/Home.js";
 import Profile from "./src/components/screens/Profile.js";

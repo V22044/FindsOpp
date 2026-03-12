@@ -137,3 +137,12 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Backend
+backend/node_modules/
+backend/.env
+
+# React Native
+node_modules/
+.expo/
+.expo-shared/
