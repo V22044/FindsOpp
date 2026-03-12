@@ -5,10 +5,13 @@ import OppList from "../entity/OppList.js";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
 import { useState } from "react";
+import { useTheme } from "react-native-paper";
 import { DetailInfo } from "../UI/DetailInfo.js";
 
 export const Home = ({ navigation }) => {
   //State ----------------------------
+  const theme = useTheme();
+  const styles = makeStyles(theme);
   const [opportunities, setOpportunities] = useState(initialOpportunities);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOpp, setSelectedOpp] = useState(null);
@@ -63,23 +66,25 @@ export const Home = ({ navigation }) => {
   );
 };
 //Styles ---------------------------
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-  },
-  titleContainer: {
-    width: "100%",
-    backgroundColor: "#cfcfcf",
-    padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginTop: 20,
-    alignSelf: "flex-start",
-  },
-});
+const makeStyles = (theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+      alignItems: "center",
+    },
+    titleContainer: {
+      width: "100%",
+      backgroundColor: theme.colors.secondaryContainer,
+      padding: 20,
+    },
+    title: {
+      color: theme.colors.onSurface,
+      fontSize: 20,
+      fontWeight: "bold",
+      marginTop: 50,
+      alignSelf: "flex-start",
+    },
+  });
 
 export default Home;
