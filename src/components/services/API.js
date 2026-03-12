@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Put API link here:
 const API_BASE_URL = "??";
-const API_USER_URL = "??";
+const API_USER_URL = "https://findsopp-backend.onrender.com/api";
 
 const Opportunity_api = axios.create({
   baseURL: API_BASE_URL,
@@ -14,7 +14,7 @@ const Opportunity_api = axios.create({
 
 const User_api = axios.create({
   baseURL: API_USER_URL,
-  timeout: 10000,
+  timeout: 15000,
   headers: {
     "Content-Type": "application/json",
   },

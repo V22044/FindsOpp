@@ -142,7 +142,4 @@ dist
 backend/node_modules/
 backend/.env
 
-# React Native
-node_modules/
-.expo/
 .expo-shared/
