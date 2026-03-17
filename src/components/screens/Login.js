@@ -17,6 +17,10 @@ const Login = ({ navigation, onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const DEV_MODE = true;
+  const handleDevBypass = () => {
+    onLogin();
+  };
 
   const handleLogin = async () => {
     if (!email.trim() || !password) {
@@ -98,12 +102,30 @@ const Login = ({ navigation, onLogin }) => {
             Don't have an account? <Text style={styles.linkBold}>Sign Up</Text>
           </Text>
         </TouchableOpacity>
+        {DEV_MODE && (
+          <TouchableOpacity style={styles.devButton} onPress={handleDevBypass}>
+            <Text style={styles.devButtonText}>DEV: Skip Login</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
+  devButton: {
+    marginTop: 20,
+    padding: 12,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ff6600",
+    alignItems: "center",
+  },
+  devButtonText: {
+    color: "#ff6600",
+    fontSize: 14,
+    fontWeight: "600",
+  },
   container: {
     flex: 1,
     backgroundColor: "#f5f5f5",
