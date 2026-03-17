@@ -1,7 +1,8 @@
 import axios from "axios";
 
 // Put API link here:
-const API_BASE_URL = "??";
+const API_BASE_URL =
+  "https://tqv4cpcyel.execute-api.eu-west-2.amazonaws.com/prod";
 const API_USER_URL = "https://findsopp-backend.onrender.com/api";
 
 const Opportunity_api = axios.create({
@@ -36,7 +37,7 @@ export const getOpportunities = async () => {
 // Get single opportunity by ID
 export const getOpportunityById = async (jobID) => {
   try {
-    const response = await api.get(`/opportunities/${jobID}`);
+    const response = await Opportunity_api.get(`/opportunities/${jobID}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching opportunity:", error);

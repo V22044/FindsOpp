@@ -19,7 +19,7 @@ export const JobCard = ({ opportunity, onSelect }) => {
   return (
     <Pressable onPress={() => onSelect(opportunity)} style={styles.card}>
       {/* image */}
-      <Image source={{ uri: opportunity.image_link }} style={styles.image} />
+      <Image source={{ uri: opportunity.imageURL }} style={styles.image} />
 
       <Pressable style={styles.bookmarkContainer} onPress={toggleBookmark}>
         <View style={styles.bookmarkIcon}>

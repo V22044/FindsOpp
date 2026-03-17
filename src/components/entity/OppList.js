@@ -11,7 +11,7 @@ const OppList = ({ opportunities, onSelect }) => {
       {opportunities.map((opportunity) => {
         return (
           <JobCard
-            key={opportunity.id}
+            key={opportunity.jobID}
             opportunity={opportunity}
             onSelect={onSelect}
           />

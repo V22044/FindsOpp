@@ -7,12 +7,15 @@ import { Button, ButtonTray } from "../UI/Button.js";
 import { useEffect, useState } from "react";
 import { useTheme } from "react-native-paper";
 import { DetailInfo } from "../UI/DetailInfo.js";
+import { getOpportunities } from "../services/API.js";
 
 export const Home = ({ navigation }) => {
   //State ----------------------------
   const theme = useTheme();
   const styles = makeStyles(theme);
-  const [opportunities, setOpportunities] = useState(initialOpportunities);
+  const [opportunities, setOpportunities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOpp, setSelectedOpp] = useState(null);
   //Handler --------------------------
@@ -22,9 +25,31 @@ export const Home = ({ navigation }) => {
     setModalVisible(true);
   };
   useEffect(() => {
-    initialOpportunities.forEach((opp) => {
-      Image.prefetch(opp.image_link);
-    });
+    const fetchOpportunities = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const response = await getOpportunities();
+
+        setOpportunities(response.opportunities || []);
+
+        if (response.opportunities) {
+          response.opportunities.forEach((opp) => {
+            if (opp.imageURL) {
+              Image.prefetch(opp.imageURL);
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Failed to fetch opportunities:", err);
+        setError("Failed to load opportunities. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOpportunities();
   }, []);
   //View -----------------------------
   return (
@@ -53,7 +78,7 @@ export const Home = ({ navigation }) => {
             setSelectedOpp(null);
           }}
           title={selectedOpp.title}
-          image={selectedOpp.image_link}
+          image={selectedOpp.imageURL}
           details={[
             selectedOpp.description,
             `Organisation: ${selectedOpp.organisation}`,
