@@ -15,8 +15,8 @@ export const SearchTab = () => {
   const styles = makeStyles(theme);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.searchContainer}>
           <FontAwesome name="search" size={20} color={theme.colors.onSurface} />
           <TextInput
@@ -24,10 +24,10 @@ export const SearchTab = () => {
             placeholder="Search opportunities..."
           />
         </View>
-      </TouchableWithoutFeedback>
 
-      <StatusBar style="auto" />
-    </SafeAreaView>
+        <StatusBar style="auto" />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 };
 const makeStyles = (theme) =>
