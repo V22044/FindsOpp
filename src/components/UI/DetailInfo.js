@@ -12,30 +12,29 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 export const DetailInfo = ({ visible, onClose, title, image, details }) => {
   return (
-    <SafeAreaProvider>
-      <Modal animationType="fade" transparent={true} visible={visible}>
-        <SafeAreaView style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{"Details"}</Text>
-            <ScrollView style={styles.scrollView}>
-              <Image
-                source={{ uri: image }}
-                style={{ width: 350, height: 200, marginBottom: 15 }}
-              />
-              <Text style={styles.modalTitle}>{title}</Text>
-              {details.map((detail, index) => (
-                <Text key={index} style={styles.detailText}>
-                  {detail}
-                </Text>
-              ))}
-            </ScrollView>
-            <Pressable style={styles.closeButton} onPress={onClose}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </Pressable>
-          </View>
-        </SafeAreaView>
-      </Modal>
-    </SafeAreaProvider>
+    <Modal animationType="fade" transparent={true} visible={visible}>
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalTitle}>{"Details"}</Text>
+          <ScrollView style={styles.scrollView}>
+            <Image
+              source={{ uri: image }}
+              style={{ width: "100%", height: 200, marginBottom: 15 }}
+              resizeMode="cover"
+            />
+            <Text style={styles.modalTitle}>{title}</Text>
+            {details.map((detail, index) => (
+              <Text key={index} style={styles.detailText}>
+                {detail}
+              </Text>
+            ))}
+          </ScrollView>
+          <Pressable style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>Close</Text>
+          </Pressable>
+        </View>
+      </View>
+    </Modal>
   );
 };
 const styles = StyleSheet.create({
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
-    paddingTop: 30,
+    paddingTop: 100,
   },
   modalView: {
     height: "90%",
@@ -70,7 +69,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: "100%",
-    margin: 20,
+    flex: 1,
   },
   detailText: {
     fontSize: 16,

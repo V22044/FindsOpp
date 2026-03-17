@@ -107,7 +107,7 @@ const Register = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("Login")}
+          onPress={() => navigation.goBack()}
           disabled={loading}
         >
           <Text style={styles.linkText}>

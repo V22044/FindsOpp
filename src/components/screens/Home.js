@@ -1,10 +1,10 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, Image } from "react-native";
 import initialOpportunities from "../../data/opportunities.js";
 import OppList from "../entity/OppList.js";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "react-native-paper";
 import { DetailInfo } from "../UI/DetailInfo.js";
 
@@ -21,7 +21,11 @@ export const Home = ({ navigation }) => {
     setSelectedOpp(opp);
     setModalVisible(true);
   };
-
+  useEffect(() => {
+    initialOpportunities.forEach((opp) => {
+      Image.prefetch(opp.image_link);
+    });
+  }, []);
   //View -----------------------------
   return (
     <View style={styles.container}>
@@ -41,26 +45,27 @@ export const Home = ({ navigation }) => {
       {/* Main */}
       <OppList opportunities={opportunities} onSelect={goToDetails} />
       {/* When click on the JOB card this will appear */}
-      <DetailInfo
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        title={selectedOpp?.title}
-        image={selectedOpp?.image_link}
-        details={
-          selectedOpp
-            ? [
-                selectedOpp.description,
-                `Organisation: ${selectedOpp.organisation}`,
-                `Date: ${selectedOpp.date}`,
-                `Time: ${selectedOpp.time}`,
-                `Duration: ${selectedOpp.duration}`,
-                `Location: ${selectedOpp.location}`,
-                `Cause: ${selectedOpp.cause}`,
-                `Contact: ${selectedOpp.contact.telephone} | ${selectedOpp.contact.email}`,
-              ]
-            : []
-        }
-      />
+      {selectedOpp && (
+        <DetailInfo
+          visible={modalVisible}
+          onClose={() => {
+            setModalVisible(false);
+            setSelectedOpp(null);
+          }}
+          title={selectedOpp.title}
+          image={selectedOpp.image_link}
+          details={[
+            selectedOpp.description,
+            `Organisation: ${selectedOpp.organisation}`,
+            `Date: ${selectedOpp.date}`,
+            `Time: ${selectedOpp.time}`,
+            `Duration: ${selectedOpp.duration}`,
+            `Location: ${selectedOpp.location}`,
+            `Cause: ${selectedOpp.cause}`,
+            `Contact: ${selectedOpp.contact.telephone} | ${selectedOpp.contact.email}`,
+          ]}
+        />
+      )}
       <StatusBar style="auto" />
     </View>
   );
