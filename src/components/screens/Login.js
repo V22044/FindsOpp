@@ -17,6 +17,8 @@ const Login = ({ navigation, onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // DEV_MODE
   const DEV_MODE = true;
   const handleDevBypass = () => {
     onLogin();
@@ -102,6 +104,8 @@ const Login = ({ navigation, onLogin }) => {
             Don't have an account? <Text style={styles.linkBold}>Sign Up</Text>
           </Text>
         </TouchableOpacity>
+
+        {/* DEV Mode Button */}
         {DEV_MODE && (
           <TouchableOpacity style={styles.devButton} onPress={handleDevBypass}>
             <Text style={styles.devButtonText}>DEV: Skip Login</Text>
