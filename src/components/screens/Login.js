@@ -8,12 +8,20 @@ import {
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
+  TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { loginUser } from "../services/API";
+import { useTheme } from "react-native-paper";
+import { useColorScheme } from "react-native";
 
 const Login = ({ navigation, onLogin }) => {
+  const theme = useTheme();
+  const colorScheme = useColorScheme();
+  const styles = makeStyles(theme);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -55,135 +63,160 @@ const Login = ({ navigation, onLogin }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View style={styles.content}>
-        <Text style={styles.title}>Welcome Back</Text>
-        <Text style={styles.subtitle}>Login to continue</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View style={styles.content}>
+          <Image
+            source={
+              colorScheme === "dark"
+                ? require("../images/logoNT.png") // Dark mode logo
+                : require("../images/logoNT_navy.png") // Light mode logo
+            }
+            style={styles.Image}
+            resizeMode="contain"
+          />
+          <Text style={styles.title}>Welcome Back</Text>
+          <Text style={styles.subtitle}>Login to continue</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="email"
-          editable={!loading}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            editable={!loading}
+          />
 
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoCapitalize="none"
-          editable={!loading}
-        />
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            autoCapitalize="none"
+            editable={!loading}
+          />
 
-        <TouchableOpacity
-          style={[styles.button, loading && styles.buttonDisabled]}
-          onPress={handleLogin}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.buttonText}>Login</Text>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={() => navigation.navigate("Register")}
-          disabled={loading}
-        >
-          <Text style={styles.linkText}>
-            Don't have an account? <Text style={styles.linkBold}>Sign Up</Text>
-          </Text>
-        </TouchableOpacity>
-
-        {/* DEV Mode Button */}
-        {DEV_MODE && (
-          <TouchableOpacity style={styles.devButton} onPress={handleDevBypass}>
-            <Text style={styles.devButtonText}>DEV: Skip Login</Text>
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled]}
+            onPress={handleLogin}
+            disabled={loading}
+          >
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.buttonText}>Login</Text>
+            )}
           </TouchableOpacity>
-        )}
-      </View>
-    </KeyboardAvoidingView>
+
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Register")}
+            disabled={loading}
+          >
+            <Text style={styles.linkText}>
+              Don't have an account?{" "}
+              <Text style={styles.linkBold}>Sign Up</Text>
+            </Text>
+          </TouchableOpacity>
+
+          {/* DEV Mode Button */}
+          {DEV_MODE && (
+            <TouchableOpacity
+              style={styles.devButton}
+              onPress={handleDevBypass}
+            >
+              <Text style={styles.devButtonText}>DEV: Skip Login</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 };
-
-const styles = StyleSheet.create({
-  devButton: {
-    marginTop: 20,
-    padding: 12,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ff6600",
-    alignItems: "center",
-  },
-  devButtonText: {
-    color: "#ff6600",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: "#333",
-  },
-  subtitle: {
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 30,
-  },
-  input: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#e0e0e0",
-  },
-  button: {
-    backgroundColor: "#0066cc",
-    padding: 16,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 15,
-  },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  linkText: {
-    color: "#666",
-    textAlign: "center",
-    fontSize: 14,
-  },
-  linkBold: {
-    color: "#0066cc",
-    fontWeight: "600",
-  },
-});
+const makeStyles = (theme) =>
+  StyleSheet.create({
+    devButton: {
+      marginTop: 20,
+      padding: 12,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: "#ff6600",
+      alignItems: "center",
+    },
+    devButtonText: {
+      color: "#ff6600",
+      fontSize: 14,
+      fontWeight: "600",
+    },
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+    },
+    content: {
+      flex: 1,
+      padding: 20,
+      justifyContent: "center",
+    },
+    Image: {
+      alignSelf: "center",
+      width: 120,
+      height: 120,
+      marginBottom: 20,
+    },
+    title: {
+      fontSize: 32,
+      fontWeight: "bold",
+      marginBottom: 8,
+      color: theme.colors.onBackground,
+      alignSelf: "center",
+    },
+    subtitle: {
+      fontSize: 16,
+      color: theme.colors.onBackground,
+      marginBottom: 50,
+      alignSelf: "center",
+    },
+    input: {
+      backgroundColor: "transparent",
+      padding: 15,
+      borderRadius: 10,
+      marginBottom: 15,
+      color: theme.colors.onBackground,
+      fontSize: 16,
+      borderWidth: 1,
+      borderColor: theme.colors.onBackground,
+    },
+    button: {
+      backgroundColor: theme.colors.primary,
+      padding: 16,
+      borderRadius: 10,
+      alignItems: "center",
+      marginTop: 10,
+      marginBottom: 30,
+    },
+    buttonDisabled: {
+      opacity: 0.6,
+    },
+    buttonText: {
+      color: theme.colors.onPrimary,
+      fontSize: 16,
+      fontWeight: "600",
+    },
+    linkText: {
+      color: theme.colors.onBackground,
+      textAlign: "center",
+      fontSize: 14,
+      marginBottom: 50,
+    },
+    linkBold: {
+      color: "#2b8df0",
+      fontWeight: "600",
+    },
+  });
 
 export default Login;
