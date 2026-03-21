@@ -10,15 +10,28 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#26A69A"
     },
     "ios": {
-      "supportsTablet": true
+      "splash": {
+        "image": "./assets/splash-icon-light.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#232323",
+        "dark": {
+          "image": "./assets/splash-icon-dark.png",
+          "backgroundColor": "#000000"
+        }
+      }
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+      "splash": {
+        "image": "./assets/splash-icon-dark.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#000000",
+        "dark": {
+          "image": "./assets/splash-icon-light.png",
+          "backgroundColor": "#232323"
+        }
       }
     },
     "web": {
