@@ -1,8 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useTheme } from "react-native-paper";
 
 export const Profile = ({ onLogout }) => {
+  const theme = useTheme();
+  const styles = makeStyles(theme);
   const DEV_MODE = true;
   const handleDevBypass = async () => {
     const user = await AsyncStorage.getItem("user");
@@ -44,38 +47,39 @@ export const Profile = ({ onLogout }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  devButton: {
-    marginTop: 20,
-    padding: 12,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ff6600",
-    alignItems: "center",
-  },
-  devButtonText: {
-    color: "#ff6600",
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#ffffff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  logoutButton: {
-    backgroundColor: "#ff3b30",
-    paddingHorizontal: 40,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginTop: 20,
-  },
-  logoutButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "600",
-  },
-});
+const makeStyles = (theme) =>
+  StyleSheet.create({
+    devButton: {
+      marginTop: 20,
+      padding: 12,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: "#ff6600",
+      alignItems: "center",
+    },
+    devButtonText: {
+      color: "#ff6600",
+      fontSize: 14,
+      fontWeight: "600",
+    },
+    container: {
+      flex: 1,
+      backgroundColor: theme.colors.background,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    logoutButton: {
+      backgroundColor: "#ff3b30",
+      paddingHorizontal: 40,
+      paddingVertical: 12,
+      borderRadius: 8,
+      marginTop: 20,
+    },
+    logoutButtonText: {
+      color: "#fff",
+      fontSize: 16,
+      fontWeight: "600",
+    },
+  });
 
 export default Profile;

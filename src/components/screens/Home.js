@@ -32,7 +32,7 @@ export const Home = ({ navigation }) => {
         setLoading(true);
         setError(null);
 
-        await new Promise((resolve) => setTimeout(resolve, 1200));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         const response = await getOpportunities();
 

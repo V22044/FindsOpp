@@ -7,6 +7,7 @@ import {
   Keyboard,
   Text,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useTheme } from "react-native-paper";
@@ -15,6 +16,9 @@ import { useState, useEffect } from "react";
 import { getOpportunities } from "../services/API";
 import OppList from "../entity/OppList";
 import { DetailInfo } from "../UI/DetailInfo";
+import FilterModal from "../UI/FilterModal";
+import FilterButton from "../UI/FilterButton";
+import ActiveFiltersPills from "../UI/ActiveFiltersPills";
 
 export const SearchTab = () => {
   const theme = useTheme();
@@ -25,8 +29,15 @@ export const SearchTab = () => {
   const [filteredOpportunities, setFilteredOpportunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
   const [selectedOpp, setSelectedOpp] = useState(null);
+  const [activeFilters, setActiveFilters] = useState({
+    causes: [],
+    locations: [],
+    timeCommitments: [],
+  });
 
+  //Fetch all opportunities
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
@@ -44,28 +55,61 @@ export const SearchTab = () => {
     fetchOpportunities();
   }, []);
 
+  //Apply search and filters
   useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredOpportunities(allOpportunities);
-    } else {
-      const filtered = allOpportunities.filter((opp) => {
-        const query = searchQuery.toLowerCase();
-        return (
+    let filtered = allOpportunities;
+
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        (opp) =>
           opp.title?.toLowerCase().includes(query) ||
           opp.description?.toLowerCase().includes(query) ||
           opp.organisation?.toLowerCase().includes(query) ||
           opp.location?.toLowerCase().includes(query) ||
-          opp.cause?.toLowerCase().includes(query)
-        );
-      });
-      setFilteredOpportunities(filtered);
+          opp.cause?.toLowerCase().includes(query),
+      );
     }
-  }, [searchQuery, allOpportunities]);
+    if (activeFilters.causes.length > 0) {
+      filtered = filtered.filter((opp) =>
+        activeFilters.causes.includes(opp.cause),
+      );
+    }
+    if (activeFilters.locations.length > 0) {
+      filtered = filtered.filter((opp) =>
+        activeFilters.locations.includes(opp.location),
+      );
+    }
+    if (activeFilters.timeCommitments.length > 0) {
+      filtered = filtered.filter((opp) =>
+        activeFilters.timeCommitments.includes(opp.duration),
+      );
+    }
+
+    setFilteredOpportunities(filtered);
+  }, [searchQuery, activeFilters, allOpportunities]);
 
   const goToDetails = (opp) => {
     setSelectedOpp(opp);
     setModalVisible(true);
   };
+
+  const handleApplyFilters = (filters) => {
+    setActiveFilters(filters);
+  };
+
+  const handleClearFilters = () => {
+    setActiveFilters({
+      causes: [],
+      locations: [],
+      timeCommitments: [],
+    });
+  };
+
+  const totalActiveFilters =
+    activeFilters.causes.length +
+    activeFilters.locations.length +
+    activeFilters.timeCommitments.length;
 
   if (loading) {
     return (
@@ -79,38 +123,56 @@ export const SearchTab = () => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.container}>
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <FontAwesome name="search" size={20} color={theme.colors.onSurface} />
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Search opportunities..."
-            placeholderTextColor="#999"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            autoCapitalize="none"
-            autoCorrect={false}
+        <View style={styles.contentWrapper}>
+          {/* Search Bar Row */}
+          <View style={styles.searchRow}>
+            {/* Search Bar */}
+            <View style={styles.searchContainer}>
+              <FontAwesome
+                name="search"
+                size={20}
+                color={theme.colors.onBackground}
+              />
+              <TextInput
+                style={styles.TextInput}
+                placeholder="Search opportunities..."
+                placeholderTextColor="#999"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              {searchQuery.length > 0 && (
+                <TouchableOpacity onPress={() => setSearchQuery("")}>
+                  <FontAwesome name="times-circle" size={20} color="#999" />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            <FilterButton
+              activeCount={totalActiveFilters}
+              onPress={() => setFilterModalVisible(true)}
+            />
+          </View>
+
+          <ActiveFiltersPills
+            activeFilters={activeFilters}
+            onRemoveFilter={setActiveFilters}
+            onClearAll={handleClearFilters}
           />
-          {searchQuery.length > 0 && (
-            <TouchableWithoutFeedback onPress={() => setSearchQuery("")}>
-              <FontAwesome name="times-circle" size={20} color="#999" />
-            </TouchableWithoutFeedback>
-          )}
+
+          <Text style={styles.resultCount}>
+            {filteredOpportunities.length} result
+            {filteredOpportunities.length !== 1 ? "s" : ""} found
+          </Text>
         </View>
 
-        {/* Result Count */}
-        <Text style={styles.resultCount}>
-          {filteredOpportunities.length} result
-          {filteredOpportunities.length !== 1 ? "s" : ""} found
-        </Text>
-
-        {/* Results List */}
         {filteredOpportunities.length === 0 ? (
           <View style={styles.centerContent}>
             <Text style={styles.emptyText}>
-              {searchQuery.trim() === ""
+              {searchQuery.trim() === "" && totalActiveFilters === 0
                 ? "Start typing to search opportunities"
-                : `No opportunities found matching "${searchQuery}"`}
+                : "No opportunities found matching your criteria"}
             </Text>
           </View>
         ) : (
@@ -120,7 +182,14 @@ export const SearchTab = () => {
           />
         )}
 
-        {/* Detail Modal */}
+        <FilterModal
+          visible={filterModalVisible}
+          onClose={() => setFilterModalVisible(false)}
+          onApplyFilters={handleApplyFilters}
+          opportunities={allOpportunities}
+          activeFilters={activeFilters}
+        />
+
         {selectedOpp && (
           <DetailInfo
             visible={modalVisible}
@@ -144,30 +213,39 @@ export const SearchTab = () => {
             ]}
           />
         )}
-
         <StatusBar style="auto" />
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 };
+
 const makeStyles = (theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
+    },
+    contentWrapper: {
+      width: "100%",
       alignItems: "center",
+      paddingHorizontal: "5%",
+    },
+    searchRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      width: "100%",
+      marginTop: 20,
+      gap: 10,
     },
     searchContainer: {
+      flex: 1,
       flexDirection: "row",
       alignItems: "center",
       height: 50,
-      width: "90%",
-      marginTop: 20,
       borderColor: "gray",
       borderWidth: 1,
       borderRadius: 5,
       paddingHorizontal: 10,
-      color: "fffff",
     },
     TextInput: {
       flex: 1,
@@ -176,9 +254,9 @@ const makeStyles = (theme) =>
       color: theme.colors.onBackground,
     },
     resultCount: {
-      width: "90%",
+      width: "100%",
       fontSize: 14,
-      color: "#666",
+      color: theme.colors.onBackground,
       marginTop: 10,
       marginBottom: 10,
     },
@@ -191,11 +269,11 @@ const makeStyles = (theme) =>
     loadingText: {
       marginTop: 10,
       fontSize: 16,
-      color: "#333",
+      color: theme.colors.onBackground,
     },
     emptyText: {
       fontSize: 16,
-      color: "#999",
+      color: theme.colors.onBackground,
       textAlign: "center",
     },
   });
