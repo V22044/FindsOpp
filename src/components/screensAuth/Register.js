@@ -102,6 +102,7 @@ const Register = ({ navigation }) => {
             style={styles.input}
             placeholder="First Name"
             value={firstName}
+            placeholderTextColor={"#999"}
             onChangeText={setFirstName}
             autoCapitalize="words"
             editable={!loading}
@@ -110,6 +111,7 @@ const Register = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="Last Name"
+            placeholderTextColor={"#999"}
             value={lastName}
             onChangeText={setLastName}
             autoCapitalize="words"
@@ -119,6 +121,7 @@ const Register = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="Email"
+            placeholderTextColor={"#999"}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -130,6 +133,7 @@ const Register = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="Password (min 6 characters)"
+            placeholderTextColor={"#999"}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -140,6 +144,7 @@ const Register = ({ navigation }) => {
           <TextInput
             style={styles.input}
             placeholder="Age"
+            placeholderTextColor={"#999"}
             value={age}
             onChangeText={setAge}
             keyboardType="number-pad"

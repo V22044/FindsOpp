@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet, Text, View, Image, Button } from "react-native";
-import { Calendar, MapPin, Clock, Bookmark } from "lucide-react-native";
+import { Pressable, StyleSheet, Text, View, Image } from "react-native";
+import { Calendar, MapPin, Clock } from "lucide-react-native";
 import { useState } from "react";
 import { useTheme } from "react-native-paper";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -64,6 +64,8 @@ const makeStyles = (theme) =>
     card: {
       backgroundColor: theme.colors.primary,
       borderRadius: 10,
+      borderColor: theme.colors.onBackground,
+      borderWidth: 4,
       marginHorizontal: 16,
       marginVertical: 10,
       shadowColor: theme.colors.shadow,

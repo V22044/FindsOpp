@@ -106,18 +106,7 @@ export const Home = ({ navigation }) => {
             setModalVisible(false);
             setSelectedOpp(null);
           }}
-          title={selectedOpp.title}
-          image={selectedOpp.imageURL}
-          details={[
-            selectedOpp.description,
-            `Organisation: ${selectedOpp.organisation}`,
-            `Date: ${selectedOpp.date}`,
-            `Time: ${selectedOpp.time}`,
-            `Duration: ${selectedOpp.duration}`,
-            `Location: ${selectedOpp.location}`,
-            `Cause: ${selectedOpp.cause}`,
-            `Contact: ${selectedOpp.contact.telephone} | ${selectedOpp.contact.email}`,
-          ]}
+          opportunity={selectedOpp}
         />
       )}
       <StatusBar style="auto" />

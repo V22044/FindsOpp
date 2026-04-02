@@ -84,6 +84,7 @@ const Login = ({ navigation, onLogin }) => {
           <TextInput
             style={styles.input}
             placeholder="Email"
+            placeholderTextColor={"#999"}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -95,6 +96,7 @@ const Login = ({ navigation, onLogin }) => {
           <TextInput
             style={styles.input}
             placeholder="Password"
+            placeholderTextColor={"#999"}
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -141,7 +143,7 @@ const Login = ({ navigation, onLogin }) => {
 const makeStyles = (theme) =>
   StyleSheet.create({
     devButton: {
-      marginTop: 20,
+      marginTop: 67,
       padding: 12,
       borderRadius: 10,
       borderWidth: 1,
@@ -211,7 +213,7 @@ const makeStyles = (theme) =>
       color: theme.colors.onBackground,
       textAlign: "center",
       fontSize: 14,
-      marginBottom: 50,
+      marginBottom: 10,
     },
     linkBold: {
       color: "#2b8df0",
