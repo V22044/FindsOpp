@@ -1,19 +1,18 @@
 import { Pressable, StyleSheet, Text, View, Image } from "react-native";
 import { Calendar, MapPin, Clock } from "lucide-react-native";
-import { useState } from "react";
 import { useTheme } from "react-native-paper";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { useBookmarks } from "../../context/BookmarksContext";
+
 export const JobCard = ({ opportunity, onSelect }) => {
   // Initialisations ---------------------
   const theme = useTheme();
   const styles = makeStyles(theme);
   // State -------------------------------
-  const [BookmarkToggle, setBookmarkToggle] = useState(false);
+  const { toggleBookmark, isBookmarked } = useBookmarks();
   // Handlers ----------------------------
-  const toggleBookmark = () => {
-    const testState = !BookmarkToggle;
-    console.log("Bookmarked:", opportunity.title, "Status:", testState);
-    setBookmarkToggle(testState);
+  const handleBookmark = () => {
+    toggleBookmark(opportunity);
   };
   // View --------------------------------
   return (
@@ -21,12 +20,19 @@ export const JobCard = ({ opportunity, onSelect }) => {
       {/* image */}
       <Image source={{ uri: opportunity.imageURL }} style={styles.image} />
 
-      <Pressable style={styles.bookmarkContainer} onPress={toggleBookmark}>
+      <Pressable
+        style={styles.bookmarkContainer}
+        onPress={() => toggleBookmark(opportunity)}
+      >
         <View style={styles.bookmarkIcon}>
           <FontAwesome
             name="bookmark"
             size={20}
-            color={BookmarkToggle ? "#42bfd8" : theme.colors.onBackground}
+            color={
+              isBookmarked(opportunity.jobID)
+                ? "#42bfd8"
+                : theme.colors.onBackground
+            }
           />
         </View>
       </Pressable>

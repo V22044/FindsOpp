@@ -11,6 +11,7 @@ import Register from "./src/components/screensAuth/Register.js";
 import { useColorScheme } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { LightTheme, DarkTheme } from "./src/theme/scheme.js";
+import { BookmarksProvider } from "./src/context/BookmarksContext";
 import { useState } from "react";
 
 const BottomTab = createBottomTabNavigator();
@@ -89,15 +90,17 @@ export const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
-    <PaperProvider theme={theme}>
-      <NavigationContainer>
-        {isLoggedIn ? (
-          <MainTabs theme={theme} onLogout={() => setIsLoggedIn(false)} />
-        ) : (
-          <AuthStack onLogin={() => setIsLoggedIn(true)} />
-        )}
-      </NavigationContainer>
-    </PaperProvider>
+    <BookmarksProvider>
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          {isLoggedIn ? (
+            <MainTabs theme={theme} onLogout={() => setIsLoggedIn(false)} />
+          ) : (
+            <AuthStack onLogin={() => setIsLoggedIn(true)} />
+          )}
+        </NavigationContainer>
+      </PaperProvider>
+    </BookmarksProvider>
   );
 };
 
