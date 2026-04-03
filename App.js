@@ -12,7 +12,10 @@ import { useColorScheme } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { LightTheme, DarkTheme } from "./src/theme/scheme.js";
 import { BookmarksProvider } from "./src/context/BookmarksContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { View, ActivityIndicator } from "react-native";
 
 const BottomTab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -88,6 +91,39 @@ export const App = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  //Check if user is already logged in on app start
+  useEffect(() => {
+    const checkLogin = async () => {
+      try {
+        const user = await AsyncStorage.getItem("user");
+        if (user) {
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        console.error("Error checking login state:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkLogin();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: theme.colors.background,
+        }}
+      >
+        <ActivityIndicator size="large" color={theme.colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <BookmarksProvider>
