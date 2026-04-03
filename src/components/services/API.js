@@ -76,4 +76,41 @@ export const getUserProfile = async (email) => {
     throw error;
   }
 };
+
+export const addBookmark = async (email, jobID) => {
+  try {
+    const response = await User_api.patch("/users/bookmark/add", {
+      email,
+      jobID,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error adding bookmark:", error);
+    throw error;
+  }
+};
+
+export const removeBookmark = async (email, jobID) => {
+  try {
+    const response = await User_api.patch("/users/bookmark/remove", {
+      email,
+      jobID,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error removing bookmark:", error);
+    throw error;
+  }
+};
+
+export const getBookmarks = async (email) => {
+  try {
+    const response = await User_api.get(`/users/profile?email=${email}`);
+    return response.data.BookmarkedOpportunities || [];
+  } catch (error) {
+    console.error("Error fetching bookmarks:", error);
+    throw error;
+  }
+};
+
 export default { Opportunity_api, User_api };
