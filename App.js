@@ -11,10 +11,12 @@ import Register from "./src/components/screensAuth/Register.js";
 import { useColorScheme } from "react-native";
 import { PaperProvider } from "react-native-paper";
 import { LightTheme, DarkTheme } from "./src/theme/scheme.js";
-import { BookmarksProvider } from "./src/context/BookmarksContext";
+import {
+  BookmarksProvider,
+  useBookmarks,
+} from "./src/context/BookmarksContext";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import { View, ActivityIndicator } from "react-native";
 
 const BottomTab = createBottomTabNavigator();
@@ -87,18 +89,20 @@ const AuthStack = ({ onLogin }) => (
     <Stack.Screen name="Register" component={Register} />
   </Stack.Navigator>
 );
-export const App = () => {
+
+// 👇 Separated into its own component so it can use useBookmarks
+const AppContent = () => {
   const colorScheme = useColorScheme();
   const theme = colorScheme === "dark" ? DarkTheme : LightTheme;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  //Check if user is already logged in on app start
+  const { clearBookmarks, loadBookmarks } = useBookmarks();
   useEffect(() => {
     const checkLogin = async () => {
       try {
         const user = await AsyncStorage.getItem("user");
         if (user) {
+          await loadBookmarks();
           setIsLoggedIn(true);
         }
       } catch (error) {
@@ -109,6 +113,16 @@ export const App = () => {
     };
     checkLogin();
   }, []);
+
+  const handleLogin = async () => {
+    await loadBookmarks();
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    clearBookmarks();
+    setIsLoggedIn(false);
+  };
 
   if (isLoading) {
     return (
@@ -126,16 +140,23 @@ export const App = () => {
   }
 
   return (
+    <PaperProvider theme={theme}>
+      <NavigationContainer>
+        {isLoggedIn ? (
+          <MainTabs theme={theme} onLogout={handleLogout} /> // 👈 uses handleLogout
+        ) : (
+          <AuthStack onLogin={handleLogin} />
+        )}
+      </NavigationContainer>
+    </PaperProvider>
+  );
+};
+
+// 👇 App just wraps everything with BookmarksProvider
+export const App = () => {
+  return (
     <BookmarksProvider>
-      <PaperProvider theme={theme}>
-        <NavigationContainer>
-          {isLoggedIn ? (
-            <MainTabs theme={theme} onLogout={() => setIsLoggedIn(false)} />
-          ) : (
-            <AuthStack onLogin={() => setIsLoggedIn(true)} />
-          )}
-        </NavigationContainer>
-      </PaperProvider>
+      <AppContent />
     </BookmarksProvider>
   );
 };

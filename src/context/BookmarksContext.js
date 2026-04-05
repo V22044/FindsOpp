@@ -13,34 +13,25 @@ export const BookmarksProvider = ({ children }) => {
   const [bookmarks, setBookmarks] = useState([]);
   const [bookmarkedIDs, setBookmarkedIDs] = useState([]);
 
-  //Load bookmarks when app starts
-  useEffect(() => {
-    const loadBookmarks = async () => {
-      try {
-        const userStr = await AsyncStorage.getItem("user");
-        if (!userStr) return;
-        const user = JSON.parse(userStr);
+  const loadBookmarks = async () => {
+    try {
+      const userStr = await AsyncStorage.getItem("user");
+      if (!userStr) return;
+      const user = JSON.parse(userStr);
 
-        //Get saved jobIDs from DB
-        const savedIDs = await getBookmarks(user.email);
-        setBookmarkedIDs(savedIDs);
+      const savedIDs = await getBookmarks(user.email);
+      setBookmarkedIDs(savedIDs);
 
-        //Fetch all opportunities to match full objects
-        if (savedIDs.length > 0) {
-          const response = await getOpportunities();
-          const allOpps = response.opportunities || [];
-          const savedOpps = allOpps.filter((opp) =>
-            savedIDs.includes(opp.jobID),
-          );
-          setBookmarks(savedOpps);
-        }
-      } catch (err) {
-        console.error("Failed to load bookmarks:", err);
+      if (savedIDs.length > 0) {
+        const response = await getOpportunities();
+        const allOpps = response.opportunities || [];
+        const savedOpps = allOpps.filter((opp) => savedIDs.includes(opp.jobID));
+        setBookmarks(savedOpps);
       }
-    };
-
-    loadBookmarks();
-  }, []);
+    } catch (err) {
+      console.error("Failed to load bookmarks:", err);
+    }
+  };
 
   const toggleBookmark = async (opportunity) => {
     try {
@@ -70,11 +61,22 @@ export const BookmarksProvider = ({ children }) => {
     }
   };
 
+  const clearBookmarks = () => {
+    setBookmarks([]);
+    setBookmarkedIDs([]);
+  };
+
   const isBookmarked = (jobID) => bookmarkedIDs.includes(jobID);
 
   return (
     <BookmarksContext.Provider
-      value={{ bookmarks, toggleBookmark, isBookmarked }}
+      value={{
+        bookmarks,
+        toggleBookmark,
+        isBookmarked,
+        clearBookmarks,
+        loadBookmarks,
+      }}
     >
       {children}
     </BookmarksContext.Provider>
