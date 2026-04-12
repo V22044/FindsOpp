@@ -77,6 +77,20 @@ export const getUserProfile = async (email) => {
   }
 };
 
+export const updateUser = async (currentEmail, updates) => {
+  try {
+    const response = await User_api.patch("/users/update", {
+      email: currentEmail,
+      newEmail: updates.email,
+      password: updates.password,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw error;
+  }
+};
+
 export const addBookmark = async (email, jobID) => {
   try {
     const response = await User_api.patch("/users/bookmark/add", {
