@@ -2,70 +2,30 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, ActivityIndicator } from "react-native";
 import initialOpportunities from "../../data/opportunities.js";
 import OppList from "../entity/OppList.js";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTheme } from "react-native-paper";
 import { DetailInfo } from "../UI/DetailInfo.js";
-import { getOpportunities } from "../services/API.js";
+import { useOpportunities } from "../../context/useOpportunities";
+import { useCurrentUser } from "../../context/useCurrentUser";
 
 export const Home = ({ navigation }) => {
   //State ----------------------------
   const theme = useTheme();
   const styles = makeStyles(theme);
-  const [opportunities, setOpportunities] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOpp, setSelectedOpp] = useState(null);
-  const [user, setUser] = useState(null);
+  const { opportunities, loading, error } = useOpportunities({
+    prefetchImages: true,
+  });
+  const { user } = useCurrentUser();
   //Handler --------------------------
   const goToSearch = () => navigation.navigate("SearchTab");
   const goToDetails = (opp) => {
     setSelectedOpp(opp);
     setModalVisible(true);
   };
-  useEffect(() => {
-    const fetchOpportunities = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        await new Promise((resolve) => setTimeout(resolve, 500));
-
-        const response = await getOpportunities();
-
-        setOpportunities(response.opportunities || []);
-
-        if (response.opportunities) {
-          response.opportunities.forEach((opp) => {
-            if (opp.imageURL) {
-              Image.prefetch(opp.imageURL);
-            }
-          });
-        }
-      } catch (err) {
-        console.error("Failed to fetch opportunities:", err);
-        setError("Failed to load opportunities. Please try again.");
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchOpportunities();
-
-    const loadUser = async () => {
-      try {
-        const userStr = await AsyncStorage.getItem("user");
-        if (userStr) {
-          setUser(JSON.parse(userStr));
-        }
-      } catch (error) {
-        console.error("Error loading user:", error);
-      }
-    };
-    loadUser();
-  }, []);
   //View -----------------------------
   if (loading) {
     return (
