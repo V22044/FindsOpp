@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, ActivityIndicator } from "react-native";
 import initialOpportunities from "../../data/opportunities.js";
 import OppList from "../entity/OppList.js";

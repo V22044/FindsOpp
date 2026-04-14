@@ -33,6 +33,12 @@ export const Saved = () => {
 
   return (
     <SafeAreaView style={styles.listContainer}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Saved</Text>
+        <Text style={styles.headerSubtitle}>
+          Track your saved opportunities
+        </Text>
+      </View>
       <OppList opportunities={bookmarks} onSelect={goToDetails} />
 
       {selectedOpp && (
@@ -56,6 +62,23 @@ const makeStyles = (theme) =>
       backgroundColor: theme.colors.background,
       alignItems: "center",
       paddingTop: 150,
+    },
+    header: {
+      paddingHorizontal: 20,
+      paddingTop: 16,
+      paddingBottom: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: theme.colors.outlineVariant,
+    },
+    headerTitle: {
+      fontSize: 22,
+      fontWeight: "bold",
+      color: theme.colors.onBackground,
+    },
+    headerSubtitle: {
+      fontSize: 13,
+      color: theme.colors.primary,
+      marginTop: 2,
     },
     listContainer: {
       flex: 1,

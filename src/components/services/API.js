@@ -140,4 +140,16 @@ export const updateInterests = async ({ email, interestList }) => {
   }
 };
 
+export const checkApprovalStatus = async (userId) => {
+  try {
+    const response = await User_api.get(
+      `/users/approval-status?userId=${userId}`,
+    );
+    return response.data; // { blocked: true/false }
+  } catch (error) {
+    console.error("Error checking approval status:", error);
+    throw error;
+  }
+};
+
 export default { Opportunity_api, User_api };
