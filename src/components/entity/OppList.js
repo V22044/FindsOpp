@@ -21,6 +21,10 @@ const OppList = ({ opportunities, onSelect }) => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+  },
+});
 
 export default OppList;
