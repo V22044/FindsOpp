@@ -4,7 +4,8 @@ import initialOpportunities from "../../data/opportunities.js";
 import OppList from "../entity/OppList.js";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "react-native-paper";
 import { DetailInfo } from "../UI/DetailInfo.js";
 import { useOpportunities } from "../../context/useOpportunities";
@@ -16,10 +17,37 @@ export const Home = ({ navigation }) => {
   const styles = makeStyles(theme);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOpp, setSelectedOpp] = useState(null);
-  const { opportunities, loading, error } = useOpportunities({
-    prefetchImages: true,
-  });
-  const { user } = useCurrentUser();
+  const {
+    opportunities: allOpportunities,
+    loading,
+    error,
+  } = useOpportunities({ prefetchImages: true });
+  const { user, reloadUser } = useCurrentUser();
+
+  useFocusEffect(
+    useCallback(() => {
+      reloadUser();
+    }, []),
+  );
+  const userInterests = user?.interestList ?? [];
+  const opportunities =
+    userInterests.length > 0
+      ? allOpportunities.filter((opp) =>
+          userInterests.some(
+            (interest) =>
+              interest.replace("_", " ").toLowerCase() ===
+              opp.cause?.toLowerCase(),
+          ),
+        )
+      : allOpportunities;
+
+  const interestLabels = {
+    environment: "Environment",
+    education: "Education",
+    animal_welfare: "Animal Welfare",
+    community: "Community",
+    health: "Health",
+  };
   //Handler --------------------------
   const goToSearch = () => navigation.navigate("SearchTab");
   const goToDetails = (opp) => {
@@ -42,7 +70,6 @@ export const Home = ({ navigation }) => {
   }
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.titleContainer}>
         <Text style={styles.title}>Welcome, {user?.firstName || "User"}</Text>
         <ButtonTray>
@@ -55,10 +82,19 @@ export const Home = ({ navigation }) => {
           />
         </ButtonTray>
       </View>
-      {/* Main */}
+
+      {userInterests.length > 0 && (
+        <View style={styles.interestView}>
+          <Text style={styles.interestText}>For you</Text>
+          <Text style={styles.interestValue}>
+            Based on your interests:{" "}
+            {userInterests.map((i) => interestLabels[i] || i).join(", ")}
+          </Text>
+        </View>
+      )}
 
       <OppList opportunities={opportunities} onSelect={goToDetails} />
-      {/* When click on the JOB card this will appear */}
+
       {selectedOpp && (
         <DetailInfo
           visible={modalVisible}
@@ -69,7 +105,6 @@ export const Home = ({ navigation }) => {
           opportunity={selectedOpp}
         />
       )}
-      <StatusBar style="auto" />
     </View>
   );
 };
@@ -79,7 +114,6 @@ const makeStyles = (theme) =>
     container: {
       flex: 1,
       backgroundColor: theme.colors.background,
-      alignItems: "center",
     },
     titleContainer: {
       width: "100%",
@@ -119,6 +153,23 @@ const makeStyles = (theme) =>
       marginTop: 8,
       color: theme.colors.onSurfaceVariant,
       textAlign: "center",
+    },
+    interestView: {
+      alignItems: "left",
+      paddingHorizontal: 20,
+      width: "100%",
+      marginBottom: 20,
+      marginTop: 20,
+    },
+    interestText: {
+      paddingBottom: 10,
+      fontWeight: "bold",
+      fontSize: 16,
+      color: theme.colors.onBackground,
+    },
+    interestValue: {
+      fontSize: 13,
+      color: theme.colors.primary,
     },
   });
 
