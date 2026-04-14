@@ -4,7 +4,7 @@ import { PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { LightTheme, DarkTheme } from "../theme/scheme.js";
 import { useAuthSession } from "./useAuthSession";
-import MainTabs from "../components/navigation/MainTabs";
+import MainStack from "../components/navigation/MainStack.js";
 import AuthStack from "../components/navigation/AuthStack.js";
 
 const AppContent = () => {
@@ -31,7 +31,7 @@ const AppContent = () => {
     <PaperProvider theme={theme}>
       <NavigationContainer>
         {isLoggedIn ? (
-          <MainTabs theme={theme} onLogout={handleLogout} />
+          <MainStack onLogout={handleLogout} />
         ) : (
           <AuthStack onLogin={handleLogin} />
         )}

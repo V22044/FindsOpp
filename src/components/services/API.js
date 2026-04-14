@@ -127,4 +127,17 @@ export const getBookmarks = async (email) => {
   }
 };
 
+export const updateInterests = async ({ email, interestList }) => {
+  try {
+    const response = await User_api.patch("/users/interests", {
+      email,
+      interestList,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating interests:", error);
+    throw error;
+  }
+};
+
 export default { Opportunity_api, User_api };
