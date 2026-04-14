@@ -17,5 +17,5 @@ export const useCurrentUser = () => {
     loadUser();
   }, []);
 
-  return { user, reloadUser: loadUser };
+  return { user, reloadUser: loadUser, setUser };
 };
