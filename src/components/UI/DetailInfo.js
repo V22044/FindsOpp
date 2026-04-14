@@ -6,13 +6,18 @@ import {
   Modal,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
 import { useTheme } from "react-native-paper";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import { checkApprovalStatus } from "../services/API";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useApplications } from "../../context/ApplicationsContext";
 
 export const DetailInfo = ({ visible, onClose, opportunity }) => {
   const theme = useTheme();
   const styles = makeStyles(theme);
+  const { addApplication, isApplied } = useApplications();
 
   if (!opportunity) return null;
 
@@ -27,8 +32,39 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
     location,
   } = opportunity;
 
-  const handleApply = () => {
-    console.log(`${title}: applied`);
+  const handleApply = async () => {
+    try {
+      // Check if already applied
+      if (isApplied(opportunity.jobID)) {
+        Alert.alert(
+          "Already Applied",
+          "You have already applied for this opportunity.",
+          [{ text: "OK" }],
+        );
+        return;
+      }
+
+      const userStr = await AsyncStorage.getItem("user");
+      const user = JSON.parse(userStr);
+
+      const userId = user.id || user._id;
+      const { blocked } = await checkApprovalStatus(userId);
+
+      if (blocked) {
+        Alert.alert(
+          "Parental Approval Required",
+          "You need your parent or guardian to approve your account before you can apply. Please ask them to check their email.",
+          [{ text: "OK" }],
+        );
+        return;
+      }
+
+      await addApplication(opportunity);
+      Alert.alert("Applied!", `You have successfully applied for "${title}".`);
+    } catch (error) {
+      console.error("Apply check failed:", error);
+      Alert.alert("Error", "Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -108,8 +144,17 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
 
           {/* Apply Button */}
           <View style={styles.footer}>
-            <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
-              <Text style={styles.applyButtonText}>Apply</Text>
+            <TouchableOpacity
+              style={[
+                styles.applyButton,
+                isApplied(opportunity.jobID) && styles.applyButtonDisabled,
+              ]}
+              onPress={handleApply}
+              disabled={isApplied(opportunity.jobID)}
+            >
+              <Text style={styles.applyButtonText}>
+                {isApplied(opportunity.jobID) ? "Already Applied" : "Apply"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -140,6 +185,9 @@ const makeStyles = (theme) =>
       shadowOpacity: 0.25,
       shadowRadius: 4,
       elevation: 5,
+    },
+    applyButtonDisabled: {
+      backgroundColor: theme.colors.surfaceDisabled,
     },
     header: {
       flexDirection: "row",

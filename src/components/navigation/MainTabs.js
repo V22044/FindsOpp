@@ -4,6 +4,7 @@ import Home from "../screens/Home.js";
 import Profile from "../screens/Profile.js";
 import SearchTab from "../screens/SearchTab.js";
 import Saved from "../screens/Saved.js";
+import Applications from "../screens/Application.js";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -33,12 +34,12 @@ const MainTabs = ({ theme, onLogout }) => (
       }}
     />
     <BottomTab.Screen
-      name="SearchTab"
-      component={SearchTab}
+      name="Applications"
+      component={Applications}
       options={{
-        title: "Search",
+        title: "Applications",
         tabBarIcon: ({ color }) => (
-          <FontAwesome name="search" size={24} color={color} />
+          <FontAwesome name="file-text-o" size={24} color={color} />
         ),
       }}
     />
