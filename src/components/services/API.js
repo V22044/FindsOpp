@@ -140,14 +140,27 @@ export const updateInterests = async ({ email, interestList }) => {
   }
 };
 
-export const checkApprovalStatus = async (userId) => {
+export const checkApprovalStatus = async (userId, jobID) => {
   try {
     const response = await User_api.get(
-      `/users/approval-status?userId=${userId}`,
+      `/users/approval-status?userId=${userId}&jobID=${jobID}`,
     );
-    return response.data; // { blocked: true/false }
+    return response.data;
   } catch (error) {
     console.error("Error checking approval status:", error);
+    throw error;
+  }
+};
+
+export const requestParentalApproval = async (userId, opportunity) => {
+  try {
+    const response = await User_api.post("/apply-request", {
+      userId,
+      opportunity,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error requesting approval:", error);
     throw error;
   }
 };
