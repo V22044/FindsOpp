@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { useTheme } from "react-native-paper";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { checkApprovalStatus } from "../services/API";
+import { checkApprovalStatus, requestParentalApproval } from "../services/API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApplications } from "../../context/ApplicationsContext";
 
@@ -33,37 +33,60 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
   } = opportunity;
 
   const handleApply = async () => {
-    try {
-      // Check if already applied
-      if (isApplied(opportunity.jobID)) {
-        Alert.alert(
-          "Already Applied",
-          "You have already applied for this opportunity.",
-          [{ text: "OK" }],
-        );
-        return;
-      }
+    if (isApplied(opportunity.jobID)) {
+      Alert.alert(
+        "Already Applied",
+        "You have already applied for this opportunity.",
+      );
+      return;
+    }
 
-      const userStr = await AsyncStorage.getItem("user");
-      const user = JSON.parse(userStr);
+    const userStr = await AsyncStorage.getItem("user");
+    const user = JSON.parse(userStr);
+    const userId = user.id || user._id;
 
-      const userId = user.id || user._id;
-      const { blocked } = await checkApprovalStatus(userId);
+    const { blocked, status } = await checkApprovalStatus(
+      userId,
+      opportunity.jobID,
+    );
 
-      if (blocked) {
-        Alert.alert(
-          "Parental Approval Required",
-          "You need your parent or guardian to approve your account before you can apply. Please ask them to check their email.",
-          [{ text: "OK" }],
-        );
-        return;
-      }
-
+    if (!blocked) {
+      // Approved (or not underage) — apply normally
       await addApplication(opportunity);
       Alert.alert("Applied!", `You have successfully applied for "${title}".`);
-    } catch (error) {
-      console.error("Apply check failed:", error);
-      Alert.alert("Error", "Something went wrong. Please try again.");
+      return;
+    }
+
+    if (status === "pending") {
+      Alert.alert(
+        "Awaiting Approval",
+        "Your parent/guardian has already been emailed. Please ask them to check their inbox and approve your application.",
+      );
+      return;
+    }
+
+    // No request yet — send the email
+    const result = await requestParentalApproval(userId, {
+      jobID: opportunity.jobID,
+      title,
+      organisation,
+      date,
+      time,
+      duration,
+      location,
+      description,
+    });
+
+    if (result.alreadySent) {
+      Alert.alert(
+        "Already Sent",
+        "An approval email was already sent. Ask your parent to check their inbox.",
+      );
+    } else if (result.emailSent) {
+      Alert.alert(
+        "📧 Approval Email Sent",
+        `We've emailed your parent/guardian about "${title}". Once they approve, you can apply!`,
+      );
     }
   };
 

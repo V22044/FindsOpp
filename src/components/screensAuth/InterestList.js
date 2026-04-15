@@ -18,6 +18,7 @@ const INTERESTS = [
   { id: "animal_welfare", label: "Animal Welfare", emoji: "🐾" },
   { id: "community", label: "Community", emoji: "🤝" },
   { id: "health", label: "Health", emoji: "❤️" },
+  { id: "youth", label: "Youth", emoji: "👦" },
 ];
 
 const InterestList = ({ navigation, route, onLogin }) => {

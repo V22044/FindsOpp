@@ -23,6 +23,7 @@ const INTEREST_LABELS = {
   animal_welfare: "Animal Welfare",
   community: "Community",
   health: "Health",
+  youth: "Youth",
 };
 
 export const Profile = ({ navigation, onLogout }) => {
