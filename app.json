@@ -32,7 +32,8 @@
           "image": "./assets/splash-icon-light.png",
           "backgroundColor": "#232323"
         }
-      }
+      },
+      "package": "com.v20024.FindsOpp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
