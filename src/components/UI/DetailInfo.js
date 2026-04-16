@@ -17,14 +17,20 @@ import {
 } from "../services/API";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useApplications } from "../../context/ApplicationsContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export const DetailInfo = ({ visible, onClose, opportunity }) => {
   const theme = useTheme();
   const styles = makeStyles(theme);
-  const { addApplication, isApplied } = useApplications();
+  const { addApplication, isApplied, loadApplications } = useApplications();
   const [showApprovalView, setShowApprovalView] = useState(false);
   const [parentEmail, setParentEmail] = useState("");
+
+  useEffect(() => {
+    if (visible) {
+      loadApplications();
+    }
+  }, [visible]);
 
   if (!opportunity) return null;
 
@@ -47,50 +53,57 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
   };
 
   const handleApply = async () => {
-    if (isApplied(opportunity.jobID)) {
-      Alert.alert(
-        "Already Applied",
-        "You have already applied for this opportunity.",
-      );
-      return;
-    }
+    try {
+      if (isApplied(opportunity.jobID)) {
+        Alert.alert(
+          "Already Applied",
+          "You have already applied for this opportunity.",
+        );
+        return;
+      }
 
-    const userStr = await AsyncStorage.getItem("user");
-    const user = JSON.parse(userStr);
-    const userId = user.id || user._id;
+      const userStr = await AsyncStorage.getItem("user");
+      const user = JSON.parse(userStr);
+      const userId = user.id || user._id;
 
-    const [{ blocked, status }, pEmail] = await Promise.all([
-      checkApprovalStatus(userId, opportunity.jobID),
-      getParentEmail(userId),
-    ]);
+      const [{ blocked, status }, pEmail] = await Promise.all([
+        checkApprovalStatus(userId, opportunity.jobID),
+        getParentEmail(userId),
+      ]);
 
-    setParentEmail(pEmail);
+      setParentEmail(pEmail);
 
-    if (!blocked) {
-      await addApplication(opportunity);
-      Alert.alert("Applied!", `You have successfully applied for "${title}".`);
-      return;
-    }
+      if (!blocked) {
+        await addApplication(opportunity);
+        Alert.alert(
+          "Applied!",
+          `You have successfully applied for "${title}".`,
+        );
+        return;
+      }
 
-    if (status === "pending") {
-      setShowApprovalView(true);
-      return;
-    }
+      if (status === "pending") {
+        setShowApprovalView(true);
+        return;
+      }
 
-    // Send the approval email
-    const result = await requestParentalApproval(userId, {
-      jobID: opportunity.jobID,
-      title,
-      organisation,
-      date,
-      time,
-      duration,
-      location,
-      description,
-    });
+      const result = await requestParentalApproval(userId, {
+        jobID: opportunity.jobID,
+        title,
+        organisation,
+        date,
+        time,
+        duration,
+        location,
+        description,
+      });
 
-    if (result.emailSent || result.alreadySent) {
-      setShowApprovalView(true);
+      if (result.emailSent || result.alreadySent) {
+        setShowApprovalView(true);
+      }
+    } catch (error) {
+      console.error("handleApply error:", error); // this will now show you any future errors
+      Alert.alert("Error", "Something went wrong. Please try again.");
     }
   };
 
