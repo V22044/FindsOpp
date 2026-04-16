@@ -165,4 +165,14 @@ export const requestParentalApproval = async (userId, opportunity) => {
   }
 };
 
+export const getParentEmail = async (userId) => {
+  try {
+    const response = await User_api.get(`/users/parent-email?userId=${userId}`);
+    return response.data.p_email;
+  } catch (error) {
+    console.error("Error fetching parent email:", error);
+    return "";
+  }
+};
+
 export default { Opportunity_api, User_api };
