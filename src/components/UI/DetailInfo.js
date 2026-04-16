@@ -59,13 +59,11 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
     const user = JSON.parse(userStr);
     const userId = user.id || user._id;
 
-    // Fire both requests at the same time instead of one after another
     const [{ blocked, status }, pEmail] = await Promise.all([
       checkApprovalStatus(userId, opportunity.jobID),
       getParentEmail(userId),
     ]);
 
-    // Store parent email early so it's ready when needed
     setParentEmail(pEmail);
 
     if (!blocked) {
@@ -75,7 +73,6 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
     }
 
     if (status === "pending") {
-      // Already sent — just show the modal immediately, no extra call needed
       setShowApprovalView(true);
       return;
     }
@@ -93,7 +90,7 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
     });
 
     if (result.emailSent || result.alreadySent) {
-      setShowApprovalView(true); // parent email is already set above
+      setShowApprovalView(true);
     }
   };
 
