@@ -42,6 +42,7 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
     date,
     time,
     duration,
+    minimumAge,
     location,
   } = opportunity;
 
@@ -94,6 +95,7 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
         date,
         time,
         duration,
+        minimumAge,
         location,
         description,
       });
@@ -210,6 +212,16 @@ export const DetailInfo = ({ visible, onClose, opportunity }) => {
                   />
                   <Text style={styles.detailText}>
                     {time} ({duration})
+                  </Text>
+                </View>
+                <View style={styles.detailRow}>
+                  <FontAwesome
+                    name="users"
+                    size={16}
+                    color={theme.colors.onSurfaceVariant}
+                  />
+                  <Text style={styles.detailText}>
+                    Minimum age: {minimumAge}
                   </Text>
                 </View>
                 <View style={styles.detailRow}>

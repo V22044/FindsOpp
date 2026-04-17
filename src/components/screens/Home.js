@@ -29,16 +29,22 @@ export const Home = ({ navigation }) => {
     }, []),
   );
   const userInterests = user?.interestList ?? [];
-  const opportunities =
-    userInterests.length > 0
-      ? allOpportunities.filter((opp) =>
-          userInterests.some(
-            (interest) =>
-              interest.replace("_", " ").toLowerCase() ===
-              opp.cause?.toLowerCase(),
-          ),
-        )
-      : allOpportunities;
+  const userAge = user?.age ?? null;
+
+  const opportunities = allOpportunities
+    .filter((opp) => {
+      if (userAge !== null && opp.minimumAge != null) {
+        return userAge >= opp.minimumAge;
+      }
+      return true;
+    })
+    .filter((opp) => {
+      if (userInterests.length === 0) return true;
+      return userInterests.some(
+        (interest) =>
+          interest.replace("_", " ").toLowerCase() === opp.cause?.toLowerCase(),
+      );
+    });
 
   const interestLabels = {
     environment: "Environment",
