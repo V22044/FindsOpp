@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View, Image, ActivityIndicator } from "react-native";
-import initialOpportunities from "../../data/opportunities.js";
 import OppList from "../entity/OppList.js";
 import { Search } from "lucide-react-native";
 import { Button, ButtonTray } from "../UI/Button.js";
