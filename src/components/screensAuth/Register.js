@@ -21,6 +21,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Register = ({ navigation }) => {
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const colorScheme = useColorScheme();
   const theme = useTheme();
   const styles = makeStyles(theme);
@@ -69,6 +70,11 @@ const Register = ({ navigation }) => {
       return;
     }
 
+    if (!EMAIL_REGEX.test(email.trim())) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return;
+    }
+
     if (!ageVerified) {
       Alert.alert("Error", "Please verify your age first");
       return;
@@ -83,6 +89,17 @@ const Register = ({ navigation }) => {
     if (isUnderAge) {
       if (!parentEmail.trim()) {
         Alert.alert("Error", "Please provide a parent/guardian email");
+        return;
+      }
+      if (!EMAIL_REGEX.test(parentEmail.trim())) {
+        Alert.alert("Error", "Please enter a valid parent/guardian email");
+        return;
+      }
+      if (parentEmail.trim().toLowerCase() === email.trim().toLowerCase()) {
+        Alert.alert(
+          "Error",
+          "Parent/guardian email must be different from your own email",
+        );
         return;
       }
       if (!parentConsent) {
@@ -151,6 +168,7 @@ const Register = ({ navigation }) => {
             style={styles.input}
             placeholder="First Name"
             value={firstName}
+            maxLength={25}
             placeholderTextColor={"#999"}
             onChangeText={setFirstName}
             autoCapitalize="words"
@@ -162,6 +180,7 @@ const Register = ({ navigation }) => {
             placeholder="Last Name"
             placeholderTextColor={"#999"}
             value={lastName}
+            maxLength={25}
             onChangeText={setLastName}
             autoCapitalize="words"
             editable={!loading}
@@ -378,7 +397,7 @@ const makeStyles = (theme) =>
       borderRadius: 10,
     },
     verifiedBtn: {
-      backgroundColor: "#e6faf1",
+      backgroundColor: theme.colors.primary,
       borderWidth: 1,
       borderColor: "#22a861",
     },
@@ -388,7 +407,7 @@ const makeStyles = (theme) =>
       fontSize: 15,
     },
     consentBox: {
-      backgroundColor: "#fefce8",
+      backgroundColor: theme.colors.secondaryContainer,
       borderRadius: 10,
       padding: 16,
       marginBottom: 16,
@@ -402,11 +421,11 @@ const makeStyles = (theme) =>
     },
     consentTitle: {
       fontWeight: "700",
-      color: "#92400e",
+      color: theme.colors.onSecondaryContainer,
       fontSize: 15,
     },
     consentDesc: {
-      color: "#92400e",
+      color: theme.colors.onSecondaryContainer,
       fontSize: 14,
       marginBottom: 14,
       lineHeight: 20,
@@ -414,7 +433,7 @@ const makeStyles = (theme) =>
     parentLabel: {
       fontSize: 14,
       fontWeight: "500",
-      color: theme.colors.onSecondary,
+      color: theme.colors.onSecondaryContainer,
       marginBottom: 6,
     },
     parentEmailWrapper: {
@@ -453,13 +472,13 @@ const makeStyles = (theme) =>
       flexShrink: 0,
     },
     checkboxChecked: {
-      backgroundColor: "#333",
-      borderColor: "#333",
+      backgroundColor: "#999",
+      borderColor: "#999",
     },
     checkboxLabel: {
       flex: 1,
       fontSize: 14,
-      color: "#333",
+      color: theme.colors.tertiary,
       lineHeight: 20,
       fontWeight: "500",
     },

@@ -27,6 +27,7 @@ const INTEREST_LABELS = {
 };
 
 export const Profile = ({ navigation, onLogout }) => {
+  const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const theme = useTheme();
   const styles = makeStyles(theme);
   const { user, reloadUser } = useCurrentUser();
@@ -72,6 +73,10 @@ export const Profile = ({ navigation, onLogout }) => {
   const handleSaveChanges = async () => {
     if (!editEmail.trim()) {
       Alert.alert("Validation", "Email cannot be empty.");
+      return;
+    }
+    if (!EMAIL_REGEX.test(editEmail.trim())) {
+      Alert.alert("Validation", "Please enter a valid email address.");
       return;
     }
     if (editPassword.trim() && editPassword !== confirmPassword) {
@@ -159,13 +164,23 @@ export const Profile = ({ navigation, onLogout }) => {
           <View style={styles.editForm}>
             <Text style={styles.fieldLabel}>Email</Text>
             <TextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                editEmail.length > 0 &&
+                  !EMAIL_REGEX.test(editEmail.trim()) &&
+                  styles.inputError,
+              ]}
               value={editEmail}
               onChangeText={setEditEmail}
               keyboardType="email-address"
               autoCapitalize="none"
               placeholderTextColor={"#999"}
             />
+            {editEmail.length > 0 && !EMAIL_REGEX.test(editEmail.trim()) && (
+              <Text style={styles.errorText}>
+                Please enter a valid email address
+              </Text>
+            )}
 
             <Text style={styles.fieldLabel}>New Password</Text>
             <TextInput
